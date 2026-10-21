@@ -29,7 +29,8 @@
       "total_power": { "name": "Total power" }
     },
     "switch": {
-      "clock_sync": { "name": "Periodic clock sync" }
+      "clock_sync": { "name": "Periodic clock sync" },
+      "schedule_type": { "name": "Schedule type flag (experimental)" }
     },
     "time": {
       "on_time": { "name": "On time" },
