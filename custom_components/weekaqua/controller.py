@@ -36,7 +36,7 @@ class WeekAquaController:
         self.on_time = DEFAULT_ON_TIME
         self.off_time = DEFAULT_OFF_TIME
         self.fade_hours = DEFAULT_FADE_HOURS
-        self.schedule_type = False
+        self.schedule_type = 0
         self.clock_sync = True
 
     async def async_load(self) -> None:
@@ -48,7 +48,7 @@ class WeekAquaController:
         self.on_time = time.fromisoformat(data.get("on_time", DEFAULT_ON_TIME.isoformat()))
         self.off_time = time.fromisoformat(data.get("off_time", DEFAULT_OFF_TIME.isoformat()))
         self.fade_hours = data.get("fade_hours", DEFAULT_FADE_HOURS)
-        self.schedule_type = data.get("schedule_type", False)
+        self.schedule_type = int(data.get("schedule_type", 0))
         self.clock_sync = data.get("clock_sync", True)
 
     @callback
@@ -76,7 +76,7 @@ class WeekAquaController:
         on_time: time | None = None,
         off_time: time | None = None,
         fade_hours: float | None = None,
-        schedule_type: bool | None = None,
+        schedule_type: int | None = None,
     ) -> None:
         on_time = on_time or self.on_time
         off_time = off_time or self.off_time
