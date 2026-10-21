@@ -36,6 +36,7 @@ class WeekAquaController:
         self.on_time = DEFAULT_ON_TIME
         self.off_time = DEFAULT_OFF_TIME
         self.fade_hours = DEFAULT_FADE_HOURS
+        self.clock_sync = True
 
     async def async_load(self) -> None:
         data = await self._store.async_load()
@@ -46,6 +47,7 @@ class WeekAquaController:
         self.on_time = time.fromisoformat(data.get("on_time", DEFAULT_ON_TIME.isoformat()))
         self.off_time = time.fromisoformat(data.get("off_time", DEFAULT_OFF_TIME.isoformat()))
         self.fade_hours = data.get("fade_hours", DEFAULT_FADE_HOURS)
+        self.clock_sync = data.get("clock_sync", True)
 
     @callback
     def async_add_listener(self, update_callback: Callable[[], None]) -> Callable[[], None]:
@@ -80,6 +82,17 @@ class WeekAquaController:
         self.on_time, self.off_time, self.fade_hours = on_time, off_time, fade_hours
         self._changed()
 
+    @callback
+    def set_clock_sync(self, enabled: bool) -> None:
+        self.clock_sync = enabled
+        self._changed()
+
+    async def async_sync_clock(self) -> None:
+        try:
+            await self.device.sync_clock()
+        except (BleakError, TimeoutError) as err:
+            raise HomeAssistantError(f"Could not reach the Week Aqua light: {err}") from err
+
     async def _send(self, packet: bytes) -> None:
         try:
             await self.device.write(packet)
@@ -97,4 +110,5 @@ class WeekAquaController:
             "on_time": self.on_time.isoformat(),
             "off_time": self.off_time.isoformat(),
             "fade_hours": self.fade_hours,
+            "clock_sync": self.clock_sync,
         }

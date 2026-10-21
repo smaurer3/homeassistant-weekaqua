@@ -28,6 +28,9 @@
     "sensor": {
       "total_power": { "name": "Total power" }
     },
+    "switch": {
+      "clock_sync": { "name": "Periodic clock sync" }
+    },
     "time": {
       "on_time": { "name": "On time" },
       "off_time": { "name": "Off time" }

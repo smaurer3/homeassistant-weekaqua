@@ -10,6 +10,7 @@ Local Bluetooth control of Week Aqua M-series aquarium lights from Home Assistan
 | Total power | The app's total-power figure: `0.39·R + 0.41·G + 0.53·B + 0.11·UV`. |
 | On time / Off time | The light's built-in daily schedule. |
 | Sunrise/sunset fade | Fade length for the schedule, 0–2.5 h in half-hour steps. |
+| Periodic clock sync | On by default. Every 15 minutes it sets the light's clock and nothing else, so the schedule is back on time soon after a power cut. |
 
 Like the app, it won't let the total power go over 100%. A slider is capped at whatever budget the other channels leave.
 
@@ -17,7 +18,7 @@ There's no on/off control, because the light has no off command. It follows its 
 
 These controls drive the app's **Mode** program, and the integration switches the light to Mode every time it connects. The app's **Advanced** program (up to 8 timed periods) isn't supported yet.
 
-It also sets the light's clock every time it connects, so the schedule runs on Home Assistant's local time.
+The light keeps a plain 24-hour clock with no timezone, set by whoever connects last. The integration sets it to Home Assistant's local time on every connection and with the periodic clock sync. The periodic sync sends only the clock. It doesn't switch programs or change levels, and it disconnects straight away so the phone app can still get in.
 
 ## Installation
 

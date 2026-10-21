@@ -1,6 +1,9 @@
 """The Week Aqua integration."""
 from __future__ import annotations
 
+from datetime import datetime
+import logging
+
 from homeassistant.components import bluetooth
 from homeassistant.components.bluetooth import (
     BluetoothCallbackMatcher,
@@ -11,12 +14,16 @@ from homeassistant.components.bluetooth import (
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant, callback
-from homeassistant.exceptions import ConfigEntryNotReady
+from homeassistant.exceptions import ConfigEntryNotReady, HomeAssistantError
+from homeassistant.helpers.event import async_track_time_interval
 
+from .const import CLOCK_SYNC_INTERVAL
 from .controller import WeekAquaController
 from .device import WeekAquaDevice
 
-PLATFORMS: list[Platform] = [Platform.NUMBER, Platform.SENSOR, Platform.TIME]
+_LOGGER = logging.getLogger(__name__)
+
+PLATFORMS: list[Platform] = [Platform.NUMBER, Platform.SENSOR, Platform.SWITCH, Platform.TIME]
 
 WeekAquaConfigEntry = ConfigEntry[WeekAquaController]
 
@@ -49,6 +56,18 @@ async def async_setup_entry(hass: HomeAssistant, entry: WeekAquaConfigEntry) -> 
         )
     )
     entry.async_on_unload(device.disconnect)
+
+    async def _sync_clock(now: datetime) -> None:
+        if not controller.clock_sync:
+            return
+        try:
+            await controller.async_sync_clock()
+        except HomeAssistantError as err:
+            _LOGGER.debug("Periodic clock sync failed: %s", err)
+
+    entry.async_on_unload(
+        async_track_time_interval(hass, _sync_clock, CLOCK_SYNC_INTERVAL, cancel_on_shutdown=True)
+    )
 
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
     return True

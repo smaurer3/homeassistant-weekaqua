@@ -1,4 +1,5 @@
 """Constants for the Week Aqua integration."""
+from datetime import timedelta
 from typing import Final
 
 DOMAIN: Final = "weekaqua"
@@ -19,3 +20,6 @@ FADE_MAX_HOURS: Final = 2.5
 # Seconds of inactivity before dropping the BLE link, so the phone app can
 # connect again (the light only accepts one connection).
 DISCONNECT_DELAY: Final = 15
+
+# How often to re-send the clock, so it comes back right after a power cut.
+CLOCK_SYNC_INTERVAL: Final = timedelta(minutes=15)
