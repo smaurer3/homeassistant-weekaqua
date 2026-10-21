@@ -45,7 +45,7 @@ All 8 bytes, written to 0x0010. Unused bytes are padded with `0x55`. Times are B
 | `FD F1 55 55 55 55 55 55` | run the **Mode** program | app |
 | `FD F2 55 55 55 55 55 55` | run the **Advanced** program | app |
 | `FB Fn R G B UV 55 55` | channel levels for program slot n (9 = Mode, 1–8 = Advanced period) | confirmed for n = 9 |
-| `FE F9 onH onM offH offM type fade` | Mode on/off window | confirmed |
+| `FE F9 onH onM offH offM aon fade` | Mode on/off window, always-on flag and fade | confirmed |
 | `FE Fn stH stM enH enM 55 55` | Advanced period n time range; 23:59 is sent as `24 00` | app |
 | `F9 55 55 55 55 55 55 55` | sent right after the clock on every connect (hard-coded in the app) | purpose unknown |
 
@@ -58,7 +58,7 @@ All 8 bytes, written to 0x0010. Unused bytes are padded with `0x55`. Times are B
 ### Mode schedule (`FE F9`)
 
 - Changing off time 20:45 → 20:46 sent `FE F9 13 45 20 46 00 02`; on time 13:45 → 13:46 sent `FE F9 13 46 20 45 00 02`.
-- **type** (byte 6) is `00` or `01`. The app flips it when you tap the centre of the schedule dial and shows nothing different either way, so its effect on the light is unknown. Always `00` in the captures.
+- **aon** (byte 6) is an always-on flag. `00` follows the schedule. `01` keeps the light on outside the scheduled hours, and changes nothing during them. `02` and `03` were tested and are ignored, both in and out of the scheduled hours. There's no "always off" value. The app flips this flag when you tap the centre of the schedule dial but shows nothing on screen, and the captures always had `00`.
 - **fade** (byte 7) is the ramp time in 30-minute steps, `00`–`05` (0–2.5 h). The app writes it as `"0"` + one digit.
 
 ### Scenes
@@ -103,5 +103,4 @@ The app's builders for other Week Aqua models also use: `FC xx` (fan, level × 2
 ## Open questions
 
 - What the standalone `F9 55…` does on this model. On other models `F9 xx` is a fan setting.
-- Whether the schedule's `type` byte changes anything on the light.
 - Advanced-program packets are taken from the app code only. Not yet captured from or tested on the light.

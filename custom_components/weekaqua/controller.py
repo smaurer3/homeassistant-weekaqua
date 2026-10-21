@@ -36,7 +36,7 @@ class WeekAquaController:
         self.on_time = DEFAULT_ON_TIME
         self.off_time = DEFAULT_OFF_TIME
         self.fade_hours = DEFAULT_FADE_HOURS
-        self.schedule_type = 0
+        self.always_on = False
         self.clock_sync = True
 
     async def async_load(self) -> None:
@@ -48,7 +48,7 @@ class WeekAquaController:
         self.on_time = time.fromisoformat(data.get("on_time", DEFAULT_ON_TIME.isoformat()))
         self.off_time = time.fromisoformat(data.get("off_time", DEFAULT_OFF_TIME.isoformat()))
         self.fade_hours = data.get("fade_hours", DEFAULT_FADE_HOURS)
-        self.schedule_type = int(data.get("schedule_type", 0))
+        self.always_on = data.get("always_on", False)
         self.clock_sync = data.get("clock_sync", True)
 
     @callback
@@ -76,15 +76,15 @@ class WeekAquaController:
         on_time: time | None = None,
         off_time: time | None = None,
         fade_hours: float | None = None,
-        schedule_type: int | None = None,
+        always_on: bool | None = None,
     ) -> None:
         on_time = on_time or self.on_time
         off_time = off_time or self.off_time
         fade_hours = self.fade_hours if fade_hours is None else fade_hours
-        schedule_type = self.schedule_type if schedule_type is None else schedule_type
-        await self._send(schedule_packet(on_time, off_time, fade_hours, schedule_type))
+        always_on = self.always_on if always_on is None else always_on
+        await self._send(schedule_packet(on_time, off_time, fade_hours, always_on))
         self.on_time, self.off_time, self.fade_hours = on_time, off_time, fade_hours
-        self.schedule_type = schedule_type
+        self.always_on = always_on
         self._changed()
 
     @callback
@@ -115,6 +115,6 @@ class WeekAquaController:
             "on_time": self.on_time.isoformat(),
             "off_time": self.off_time.isoformat(),
             "fade_hours": self.fade_hours,
-            "schedule_type": self.schedule_type,
+            "always_on": self.always_on,
             "clock_sync": self.clock_sync,
         }

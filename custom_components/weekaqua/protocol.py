@@ -34,12 +34,13 @@ def levels_packet(levels: Sequence[float]) -> bytes:
     return bytes([0xFB, 0xF9, *(level_byte(p) for p in levels), PAD, PAD])
 
 
-def schedule_packet(on: time, off: time, fade_hours: float, schedule_type: int = 0) -> bytes:
+def schedule_packet(on: time, off: time, fade_hours: float, always_on: bool = False) -> bytes:
+    """Byte 6: 00 follows the schedule, 01 keeps the light on outside it."""
     return bytes([
         0xFE, 0xF9,
         _bcd(on.hour), _bcd(on.minute),
         _bcd(off.hour), _bcd(off.minute),
-        schedule_type, round(fade_hours * 2),
+        0x01 if always_on else 0x00, round(fade_hours * 2),
     ])
 
 

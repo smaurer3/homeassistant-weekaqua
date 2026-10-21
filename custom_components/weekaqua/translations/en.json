@@ -28,10 +28,8 @@
     "sensor": {
       "total_power": { "name": "Total power" }
     },
-    "select": {
-      "schedule_type": { "name": "Schedule type byte (experimental)" }
-    },
     "switch": {
+      "always_on": { "name": "Always on" },
       "clock_sync": { "name": "Periodic clock sync" }
     },
     "time": {
