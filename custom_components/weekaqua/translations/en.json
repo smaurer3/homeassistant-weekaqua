@@ -1,0 +1,36 @@
+{
+  "config": {
+    "flow_title": "{name}",
+    "step": {
+      "user": {
+        "description": "Choose a Week Aqua light to set up.",
+        "data": {
+          "address": "Light"
+        }
+      },
+      "bluetooth_confirm": {
+        "description": "Set up {name}?"
+      }
+    },
+    "abort": {
+      "already_configured": "This light is already configured.",
+      "no_devices_found": "No Week Aqua lights found. Force-stop the WeekAqua app (it keeps the light connected in the background) and check a Bluetooth proxy is in range."
+    }
+  },
+  "entity": {
+    "number": {
+      "red": { "name": "Red" },
+      "green": { "name": "Green" },
+      "blue": { "name": "Blue" },
+      "uv": { "name": "UV" },
+      "fade": { "name": "Sunrise/sunset fade" }
+    },
+    "sensor": {
+      "total_power": { "name": "Total power" }
+    },
+    "time": {
+      "on_time": { "name": "On time" },
+      "off_time": { "name": "Off time" }
+    }
+  }
+}

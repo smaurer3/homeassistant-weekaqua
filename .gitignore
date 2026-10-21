@@ -1,0 +1,5 @@
+.venv/
+__pycache__/
+*.pyc
+# Raw HCI snoop logs include every nearby Bluetooth device the phone scanned.
+captures/
