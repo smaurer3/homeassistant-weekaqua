@@ -16,7 +16,7 @@ from homeassistant.exceptions import ConfigEntryNotReady
 from .controller import WeekAquaController
 from .device import WeekAquaDevice
 
-PLATFORMS: list[Platform] = [Platform.LIGHT, Platform.NUMBER, Platform.SENSOR, Platform.TIME]
+PLATFORMS: list[Platform] = [Platform.NUMBER, Platform.SENSOR, Platform.TIME]
 
 WeekAquaConfigEntry = ConfigEntry[WeekAquaController]
 

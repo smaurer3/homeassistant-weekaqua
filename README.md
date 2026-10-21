@@ -6,15 +6,18 @@ Local Bluetooth control of Week Aqua M-series aquarium lights from Home Assistan
 
 | Entity | Does |
 |---|---|
-| Light | On/off, brightness and colour. Uses HA's RGBW colour mode with the "white" channel driving **UV**. Off sets every channel to 0; on restores the last mix. |
 | Red / Green / Blue / UV | 0–100% sliders, one per channel. |
 | Total power | The app's total-power figure: `0.39·R + 0.41·G + 0.53·B + 0.11·UV`. |
 | On time / Off time | The light's built-in daily schedule. |
 | Sunrise/sunset fade | Fade length for the schedule, 0–2.5 h in half-hour steps. |
 
-Like the app, it won't let the total power go over 100%. A channel slider is capped at whatever budget the other channels leave. The light entity scales all channels down together, so the colour mix is kept.
+Like the app, it won't let the total power go over 100%. A slider is capped at whatever budget the other channels leave.
 
-It also sets the light's clock every time it connects, so the schedule runs on Home Assistant's time.
+There's no on/off control, because the light has no off command. It follows its own daily schedule, just as with the app. To keep it dark, set a schedule that doesn't come on, the same way you would in the app.
+
+These controls drive the app's **Mode** program, and the integration switches the light to Mode every time it connects. The app's **Advanced** program (up to 8 timed periods) isn't supported yet.
+
+It also sets the light's clock every time it connects, so the schedule runs on Home Assistant's local time.
 
 ## Installation
 
